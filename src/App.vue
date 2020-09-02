@@ -3,14 +3,17 @@
     <div class="container">
       <div
         class="item"
-        :style="{ height: item * 10 + 'px', backgroundColor: colorList[index] }"
         v-for="(item, index) in list"
+        :style="{
+          height: item.height * 10 + 'px',
+          backgroundColor: item.color
+        }"
         :key="index"
       >
-        {{ item }}
+        {{ item.height }}
       </div>
     </div>
-    <button @click="changeSort">点击切换排序</button>
+    <button @click="changeSort">点击切换排序{{ flag }}</button>
   </div>
 </template>
 
@@ -19,26 +22,22 @@ export default {
   name: 'App',
   data () {
     return {
-      list: [10, 8, 15, 6, 2],
-      colorList: ['red', 'green', 'blue', 'yellow', 'black'],
-      flag: false
+      list: [
+        { height: 10, color: 'red' },
+        { height: 8, color: 'green' },
+        { height: 15, color: 'blue' },
+        { height: 6, color: 'yellow' },
+        { height: 2, color: 'black' }
+      ],
+      flag: true
     }
   },
   methods: {
     changeSort () {
-      function sortDec (a, b) {
-        return a - b
-      }
-      function sortAdd (a, b) {
-        return b - a
-      }
-      if (this.flag) {
-        this.list.sort(sortDec)
-        window.console.log(this.list)
-      } else {
-        this.list.sort(sortAdd)
-        window.console.log(this.list)
-      }
+      this.flag
+        ? this.list.sort((a, b) => a.height - b.height)
+        : this.list.reverse()
+      this.flag = !this.flag
     }
   }
 }
@@ -47,9 +46,7 @@ export default {
 <style>
 .container {
   display: flex;
-  align-items: start;
-  width: 500px;
-  height: 500px;
+  align-items: flex-end;
   border: 1px solid #000;
 }
 .container .item {
